@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>WebSocket cursors</title>
+
+  <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css">
+
+  <!-- 可选的Bootstrap主题文件（一般不用引入） -->
+  <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap-theme.min.css">
+
+  <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+  <script src="/lib/jquery/dist/jquery.min.js"></script>
+
+  <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+  <script src="/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+
+  <script src="/javascripts/wdcClient.js"></script>
+
+</head>
+
+<body>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="">Home</a></li>
+        <li><a href="">About</a></li>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="idTextTaskRecv" class="col-sm-2 control-lable">Task Received:</label>
+          <div class="col-sm-10">
+            <textarea class="form-control" id="idTextTaskRecv" readonly="readonly" rows="10" cols="20">
+            </textarea>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="idTextResultRsp" class="col-sm-2 control-lable">Result Response:</label>
+          <div class="col-sm-10">
+            <textarea class="form-control" id="idTextResultRsp" readonly="readonly" rows="10" cols="20">
+            </textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="idTextTask" class="col-sm-2 control-lable">Task</label>
+          <div class="col-sm-10">
+            <textarea class="form-control" id="idTextTask" rows="10" cols="20">
+              function wdcTask(context, callback) {callback({taskResult : "hello wdc"});}
+            </textarea>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button id="idBtnSend">发送</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="idTextResult" class="col-sm-2 control-lable">Result</label>
+          <div class="col-sm-10">
+            <textarea class="form-control" id="idTextResult" rows="10" cols="20">
+              Here is the result!
+            </textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $('#idBtnSend').click(
+      function () {
+        var reqData = {
+          context: {},
+          runnable: encodeURI($('#idTextTask').val())
+        };
+
+        $.ajax({
+          type: "POST",
+          url: "ws/submitTask",
+          data: reqData,
+          datatype: "json",
+          success: function (data) {
+            $('#idTextResult').val(JSON.stringify(data));
+          },
+          error: function () {
+            $('#idTextResult').val("send request failure!");
+          }
+        });
+      }
+    );
+  </script>
+
+</body>
+
+
+<script type="text/javascript">
+  window.onload = function () {
+    console.log("onload() ...");
+    new WDCClient('ws://47.88.152.88:9888', 
+      function(task) {
+        $('#idTextTaskRecv').val((new Date()).toLocaleString() + ': ' + decodeURI(task) + '\r\n' + $('#idTextTaskRecv').val());
+      }, function(result) {
+        $('#idTextResultRsp').val((new Date()).toLocaleString() + ': ' + result + '\r\n' + $('#idTextResultRsp').val());
+      });
+  }
+
+</script>
+
+
+</html>
