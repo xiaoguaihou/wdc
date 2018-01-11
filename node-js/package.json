@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "lint": "eslint wdc_managern --fix",
+    "lint:create": "eslint --init"
   },
   "dependencies": {
     "body-parser": "~1.17.1",
@@ -20,7 +22,9 @@
     "node-uuid": "1.4.8"
   },
   "main": "app.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^4.15.0"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

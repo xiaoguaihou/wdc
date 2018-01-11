@@ -4,15 +4,15 @@ module.exports = class Executor {
             IDLE : 0,
             BUSY : 1,
             CLOSED : 2
-        }
         };
+    }
     static get EVENT() {
         return {
             TASK_COMPLETE : 0,
             EXECUTOR_DEAD : 1
-        }
         };
-
+    }
+    
     constructor(wsClient, key, onEvent) {
         
         this.wsClient = wsClient;
